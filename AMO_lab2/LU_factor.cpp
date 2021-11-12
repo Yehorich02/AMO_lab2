@@ -75,7 +75,7 @@ void x_find(const std::vector<std::vector<double>>& u_matrix,
 		sum = 0;
 	}
 }
-int main()
+void LU()
 {
 	//std::cout << S;
 	std::vector<std::vector<double>> l_arr(S, std::vector<double>(S));

@@ -1,7 +1,9 @@
 #include "Header.h"
+#include "Hol_method.h"
 
 int main()
 {
-	Gausse_method();
+	hol_method();
+	//Gausse_method();
 	//LU();
 }
