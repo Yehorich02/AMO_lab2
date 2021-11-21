@@ -1,8 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
-#define S 9
+#include "LU_factor.h"
 
 auto aMatrix()
 {
