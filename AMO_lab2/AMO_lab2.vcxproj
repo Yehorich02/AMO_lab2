@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="detViaTMA.cpp" />
     <ClCompile Include="Gauss.cpp" />
     <ClCompile Include="LU_factor.cpp" />
     <ClCompile Include="Source.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="Header.h" />
     <ClInclude Include="Hol_method.h" />
     <ClInclude Include="LU_factor.h" />
+    <ClInclude Include="TMA.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

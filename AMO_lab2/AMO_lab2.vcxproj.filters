@@ -30,6 +30,9 @@
     <ClCompile Include="SweepMethod.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="detViaTMA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LU_factor.h">
@@ -39,6 +42,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Hol_method.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TMA.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
