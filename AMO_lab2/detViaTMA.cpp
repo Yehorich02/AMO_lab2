@@ -1,6 +1,6 @@
 #include "TMA.h"
 
-double findDetViaTMA(const std::vector<std::vector<double>>& arr,
+double findDetViaTMA(const std::vector<std::vector<double>> &arr,
 	const std::vector < std::pair < double, double>>& vec)
 {
 	double res = 1;
@@ -15,7 +15,7 @@ double findDetViaTMA(const std::vector<std::vector<double>>& arr,
 	return res;
 }
 
-void printDetViaTMA()
+void printDetViaTMA(std::vector<std::vector<double>> arr, std::vector<double> vec)
 {
-	std::cout << "detA = " << findDetViaTMA(tmaMatrix(), straightRun(tmaMatrix(), tmaRVector()));
+	std::cout << "detA = " << findDetViaTMA(arr, straightRun(arr, vec));
 }

@@ -27,10 +27,13 @@
     <ClCompile Include="Hol_method.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SweepMethod.cpp">
+    <ClCompile Include="TMAMethod.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="detViaTMA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,13 +41,16 @@
     <ClInclude Include="LU_factor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header.h">
+    <ClInclude Include="Gauss.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Hol_method.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TMA.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

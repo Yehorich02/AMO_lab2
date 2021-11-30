@@ -142,14 +142,16 @@
     <ClCompile Include="detViaTMA.cpp" />
     <ClCompile Include="Gauss.cpp" />
     <ClCompile Include="LU_factor.cpp" />
+    <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Hol_method.cpp" />
-    <ClCompile Include="SweepMethod.cpp" />
+    <ClCompile Include="TMAMethod.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Header.h" />
+    <ClInclude Include="Gauss.h" />
     <ClInclude Include="Hol_method.h" />
     <ClInclude Include="LU_factor.h" />
+    <ClInclude Include="Matrix.h" />
     <ClInclude Include="TMA.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
