@@ -1,78 +1,90 @@
 #include "Hol_method.h"
 
-std::vector<std::vector<double>> Cholesky_Ut_matrix(const std::vector<std::vector<double>>& arr)
+std::vector<std::vector<double>> Cholesky_U_matrix(const std::vector<std::vector<double>>& arr)
 {
-	std::vector<std::vector<double>> Ut (arr[0].size(), std::vector<double>(arr[0].size()));
+	std::vector<std::vector<double>> U (arr.size(), std::vector<double>(arr[0].size()));
 	double sum = 0;
-	double sumDiagonEl = 0;
-	for (int i = 0; i < signed(arr[0].size()); i++)
+	int n = signed(arr.size());
+	for (int i = 0; i < n; i++)
 	{
+		sum = 0;
 		//find diagon elements
-		//for (int k = 0; k <= i - 1; k++)
-		//{
-		//	sum += std::pow(Ut[k][i], 2);
-		//}
-		sumDiagonEl += std::pow(Ut[i][i], 2);
+		for (int k = 0; k <= i - 1; k++)
+		{
+			sum += U[k][i] * U[k][i];
+		}
+		U[i][i] = std::sqrt(arr[i][i] - sum);
 
-		Ut[i][i] = std::sqrt(arr[i][i] - sumDiagonEl);
 	//	std::cout << "Ut[" << i << "][" << i << "] = " << Ut[i][i] << std::endl;
-
 		// find other elements
-		for (int j = i + 1; j < signed(arr[0].size()); j++)
+		for (int j = i + 1; j < n; j++)
 		{
 			sum = 0;
 			for (int k = 0; k <= i - 1; k++)
 			{
-				sum += Ut[k][j] * Ut[k][i];
+				sum += U[k][j] * U[k][i];
 			}
-			Ut[i][j] = (arr[i][j] - sum) / Ut[i][i];
+			U[i][j] = (arr[i][j] - sum) / U[i][i];
 		}
+
+		std::cout << "----U(" << i << ") matrix----" << std::endl;
+		printMatrix(U);
 	}
-	return Ut;
+
+	return U;
 }
 
-std::vector<double> Cholesky_y_find(const std::vector<std::vector<double>>& Ut, std::vector<double> b)
+std::vector<double> Cholesky_find(const std::vector<std::vector<double>>& U, std::vector<double> b)
 {
-	std::vector<double> y;
+	int n = signed(U.size());
+	std::vector<double> y (n);
 	double sum = 0;
-	for (int i = 0; i < signed(Ut[0].size()); i++)
+	for (int i = 0; i < n; i++)
 	{
 		for (int k = 0; k <= i - 1; k++)
-			sum += Ut[k][i] * y[k];
-		y.push_back((b[i] - sum) / Ut[i][i]);
+			sum += U[k][i] * y[k];
+		y[i] = (b[i] - sum) / U[i][i];
 		sum = 0;
 	}
-	return y;
-}
 
-std::vector<double> Cholesky_x_find(const std::vector<std::vector<double>>& Ut, std::vector<double> y)
-{
-	std::vector<double> x(Ut[0].size());
-	double sum = 0;
-	for (int i = Ut[0].size()-1; i >= 0; i--)
+	printVectorResult(y, "y");
+
+	std::vector<double> x(n);
+
+	for (int i = n - 1; i >= 0; i--)
 	{
-		for (int k = i + 1; k < signed(Ut[0].size()); k++)
-			sum += Ut[i][k] * x[k];
-		x[i]=(y[i] - sum) / Ut[i][i];
+		for (int k = i + 1; k < n; k++)
+			sum += U[i][k] * x[k];
+		x[i] = (y[i] - sum) / U[i][i];
 		sum = 0;
 	}
 	return x;
 }
+
 void Cholesky_factorization(std::vector<std::vector<double>> arr, std::vector<double> vec)
 {
-	double sum = 0;
-	for (int i = 0; i < 10000; i++)
+	std::cout << "----Input matrix A----" << std::endl;
+	printMatrix(arr);
+	std::cout << "----Input vector B----" << std::endl;
+	printVector(vec);
+
+	if (matrixSemetric(arr))
 	{
-		std::vector<std::vector<double>> U;
-		auto start = std::chrono::system_clock::now();
-		U = Cholesky_Ut_matrix(arr);
-		auto end = std::chrono::system_clock::now();
-		std::vector<double> x = Cholesky_x_find(U, Cholesky_y_find(U, vec));
-		
-		sum += std::chrono::duration<float>(end - start).count();
+		std::vector<std::vector<double>> U(arr.size(), std::vector<double>(arr[0].size()));
+		std::vector<double> x;
+		for (int i = 0; i< signed(arr.size()); i++)
+			for (int j = 0; j < signed(arr.size()); j++)
+				U[i][j] = 0;
+		U = Cholesky_U_matrix(arr);
+		x = Cholesky_find(U, vec);
+
+		std::cout << "----matrix U----" << std::endl;
+		printMatrix(arr);
+
+		printVectorResult(x);
 	}
-	std::cout << sum / 10000;
-	//std::vector<std::vector<double>> U;
-	//U = Cholesky_Ut_matrix(arr);
-	//std::vector<double> x = Cholesky_x_find(U, Cholesky_y_find(U, vec));
+	else
+	{
+		std::cout << "This matrix is not semetric";
+	}
 }

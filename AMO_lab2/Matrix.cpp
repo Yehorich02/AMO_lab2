@@ -69,14 +69,54 @@ void printMatrix(const std::vector<std::vector<double>>& arr)
 	std::cout << std::endl;
 }
 
+void printVector(const std::vector<double>& arr)
+{
+	for (const auto& a : arr)
+		std::cout << a << " ";
+	std::cout << std::endl << std::endl;
+}
 void printVectorResult(const std::vector<double>& vec)
 {
-	int i = 1;
+	int i = 0;
 	std::cout << "---- RESULTS ----" << std::endl;
 	for (const auto& a : vec)
 	{
-		std::cout << "x[" << i << "] = " << std::setw(9) << std::setfill(' ') << a << std::endl;
+		std::cout << "x[" << i << "] = " << std::setprecision(9) << a << std::endl;
 		i++;
+	}
+	std::cout << std::endl;
+}
+
+void printVectorResult(const std::vector<double>& vec, std::string str)
+{
+	int i = 0;
+	std::cout << "---- RESULTS for vector " << str << " ----" << std::endl;
+	for (const auto& a : vec)
+	{
+		std::cout << str << "[" << i << "] = " << std::setprecision(9) << a << std::endl;
+		i++;
+	}
+	std::cout << std::endl;
+}
+
+bool matrixSemetric(const std::vector<std::vector<double>>& arr)
+{
+	for (int i = 0; i < arr.size(); i++)
+	{
+		for (int j = 0; j < i; j++)
+			if (arr[i][j] != arr[j][i])
+				return 0;
+	}
+	return 1;
+}
+
+
+void printMatrix(std::pair< std::vector<std::vector<double>>, std::vector<double>> a_b) {
+	for (auto a = 0; a< signed(a_b.first[0].size()); a++)
+	{
+		for (auto b = 0; b < signed(a_b.first[0].size()); b++)
+			std::cout << a_b.first[a][b] << " ";
+		std::cout << "    " << a_b.second[a] << std::endl;
 	}
 	std::cout << std::endl;
 }

@@ -17,5 +17,5 @@ double findDetViaTMA(const std::vector<std::vector<double>> &arr,
 
 void printDetViaTMA(std::vector<std::vector<double>> arr, std::vector<double> vec)
 {
-	std::cout << "detA = " << findDetViaTMA(arr, straightRun(arr, vec));
+	std::cout << "detA = " << findDetViaTMA(arr, straightRun(arr, vec)) << std::endl;
 }

@@ -3,32 +3,58 @@
 
 void LUMatrix(std::vector<std::vector<double>> a_matrix, std::vector<std::vector<double>> &l_matrix, std::vector<std::vector<double>> &u_matrix, int n)
 {
-	for (int val = 0; val < n; val++)
+	double sum;
+	for (int p = 0; p < n; p++)
 	{
-		double sum = 0;
-		for (int i = val; i < n; i++)
+		// for L matrix
+		for (int i = p; i < n; i++)
 		{
-			for (int k = 0; k <= val - 1; k++)
-			{
-				sum += u_matrix[k][val] * l_matrix[i][k];
-			}
-			l_matrix[i][val] = a_matrix[i][val] - sum;
 			sum = 0;
+			for (int k = 0; k < p; k++)
+			{
+				sum += u_matrix[k][p] * l_matrix[i][k];
+			}
+			l_matrix[i][p] = a_matrix[i][p] - sum;
 		}
 
-		for (int j = val+1; j < n; j++)
-		{
-			for (int k = 0; k <= val - 1; k++)
-			{
-				sum += u_matrix[k][j] * l_matrix[val][k];
-			}
-			u_matrix[val][j] = (a_matrix[val][j] - sum) / l_matrix[val][val];
-			sum = 0;
-		}
 		
+		// print L matrix
+		std::cout << "---- LOWER MATRIX " << p << "----" << std::endl;
+		printMatrix(l_matrix);
+
+		//for U matrix
+		for (int j = p + 1; j < n; j++)
+		{
+			sum = 0;
+			for (int k = 0; k < p; k++)
+				sum += u_matrix[k][j] * l_matrix[p][k];
+			u_matrix[p][j] = (a_matrix[p][j] - sum) / l_matrix[p][p];
+		}
+		// print U matrix
+		std::cout << "---- UPPER MATRIX " << p << "----" << std::endl;
+		printMatrix(u_matrix);
 	}
 }
 
+bool minors(std::vector<std::vector<double>>& arr)
+{
+	int n = arr.size();
+	std::vector<double> vec;
+
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = i + 1; j < n; j++)
+		{
+			for (int p = 0; p < n - 1; p++)
+			{
+				for (int r = p + 1; r < n; r++)
+					vec.push_back(arr[i][p] * arr[j][r] - arr[i][r] * arr[j][p]);
+			}
+		}
+	}
+	std::vector<double> minors(vec.begin() + 9, vec.end());
+	return std::any_of(minors.begin(), minors.end(), [](double tmp) {return tmp == 0; });
+}
 void y_find(const std::vector<std::vector<double>>& l_matrix,
 	std::vector<double>& y_vector, const std::vector<double> &b_vector, int n)
 {
@@ -57,11 +83,13 @@ void x_find(const std::vector<std::vector<double>>& u_matrix,
 		sum = 0;
 	}
 }
+
 void LU(std::vector<std::vector<double>> arr, std::vector<double> vec)
 {
-	double sum = 0;
-	for (int a=0; a<10000; a++)
+	if (!minors(arr))
 	{
+		std::cout << "---- GIVEN MATRIX ----" << std::endl;
+		printMatrix(arr);
 		int S = arr[0].size();
 		std::vector<std::vector<double>> l_arr(S, std::vector<double>(S));
 		std::vector<std::vector<double>> u_arr(S, std::vector<double>(S));
@@ -69,40 +97,25 @@ void LU(std::vector<std::vector<double>> arr, std::vector<double> vec)
 		std::vector<double > x_vec(S);
 
 		for (int a = 0; a < S; a++)
-		{
 			u_arr[a][a] = 1;
-		}
 
 		auto start = std::chrono::system_clock::now();
 		LUMatrix(arr, l_arr, u_arr, S);
-		auto end = std::chrono::system_clock::now();
 		y_find(l_arr, y_vec, vec, S);
 		x_find(u_arr, y_vec, x_vec, S);
-		
-		sum += std::chrono::duration<float>(end - start).count();
+		auto end = std::chrono::system_clock::now();
+
+		std::cout << "---- LOWER MATRIX ----" << std::endl;
+		printMatrix(l_arr);
+		std::cout << "---- UPPER MATRIX ----" << std::endl;
+		printMatrix(u_arr);
+
+		printVectorResult(y_vec, "y");
+		printVectorResult(x_vec);
 	}
-	std::cout << sum / 10000;
-	//int S = arr[0].size();
-	//std::vector<std::vector<double>> l_arr(S, std::vector<double>(S));
-	//std::vector<std::vector<double>> u_arr(S, std::vector<double>(S));
-	//std::vector<double > y_vec(S);
-	//std::vector<double > x_vec(S);
-	//
-	//for (int a = 0; a < S; a++)
-	//{
-	//	u_arr[a][a] = 1;
-	//}
-	//
-	//auto start = std::chrono::system_clock::now();
-	//LUMatrix(arr, l_arr, u_arr, S);
-	//y_find(l_arr, y_vec, vec, S);
-	//x_find(u_arr, y_vec, x_vec, S);
-	//auto end = std::chrono::system_clock::now();
-	//printMatrix(arr);
-	//std::cout << "---- LOWER MATRIX ----" << std::endl;
-	//printMatrix(l_arr);
-	//std::cout << "---- UPPER MATRIX ----" << std::endl;
-	//printMatrix(u_arr);
-	//printVectorResult(x_vec);
-	//std::cout << "Duration = " << std::setprecision(10) << std::chrono::duration<float>(end - start).count() * 100'000'0 << std::endl;
+	else
+	{
+		std::cout << "Minor = 0" << std::endl;
+	}
+	
 }

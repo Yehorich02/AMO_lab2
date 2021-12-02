@@ -20,16 +20,6 @@ void modify_matrix(std::pair< std::vector<std::vector<double>>, std::vector<doub
 	std::swap(a_b.second[n], a_b.second[val]);
 }
 
-void MatrixPrint(std::pair< std::vector<std::vector<double>>, std::vector<double>> a_b) {
-	for (auto a = 0; a< signed(a_b.first[0].size()); a++)
-	{
-		for (auto b = 0; b < signed(a_b.first[0].size()); b++)
-			std::cout << a_b.first[a][b] << " ";
-		std::cout << "    " << a_b.second[a] << std::endl;
-	}
-	std::cout << std::endl;
-}
-
 std::vector<double> scaling(const std::pair< std::vector<std::vector<double>>, std::vector<double>> &a_b, int n)
 {
 	std::vector<double> vec;
@@ -69,51 +59,32 @@ std::vector<double> result(const std::pair< std::vector<std::vector<double>>, st
 	}
 	return result;
 }
-void VectorPrint(const std::vector<double>& vec)
-{
-	for (auto a : vec)
-		std::cout << a << " ";
-	std::cout << std::endl;
-}
+
 void Gausse_method(std::vector<std::vector<double>> arr, std::vector<double> vec)
 {
-	double sum = 0;
-	for (int i = 0; i < 100'000; i++)
-	{
-		std::pair< std::vector<std::vector<double>>, std::vector<double>> AB(arr, vec);
-
-		std::vector<double> vecRes;
-		auto start = std::chrono::system_clock::now();
-		int N = arr[0].size();
-		for (int i = 0; i < N; i++)
-		{
-			modify_matrix(AB, i);
-			vecRes = scaling(AB, i);
-			transformation(AB, vecRes, i);
-		}
-		auto end = std::chrono::system_clock::now();
-		vecRes = result(AB);
-		sum += std::chrono::duration<float>(end - start).count();
-		if(i == 99999)
-			printVectorResult(vecRes);
-		
-	}
-	std::cout << "Duration = " << std::setprecision(10) << sum / 100000 << std::endl;
+	std::pair< std::vector<std::vector<double>>, std::vector<double>> AB(arr, vec);
 	
-	//std::pair< std::vector<std::vector<double>>, std::vector<double>> AB(arr, vec);
-	//
-	//std::vector<double> vecRes;
-	//int N = arr[0].size();
-	//std::cout << "---- GIVEN MATRIX ----" << std::endl;
-	//printMatrix(AB.first);
-	//for (int i = 0; i < N; i++)
-	//{
-	//	modify_matrix(AB ,i);
-	//	vecRes = scaling(AB, i);
-	//	transformation(AB, vecRes, i);
-	//	vecRes = result(AB);
-	//	std::cout << "---- MODIFIED MATRIX N." << i+1 << " ----" << std::endl;
-	//	printMatrix(AB.first);
-	//}
-	//printVectorResult(vecRes);
+	std::vector<double> vecRes;
+	int N = arr[0].size();
+	std::cout << "---- GIVEN MATRIX ----" << std::endl;
+	printMatrix(AB.first);
+	for (int i = 0; i < N; i++)
+	{
+		modify_matrix(AB ,i);
+		std::cout << "---- MODIFIED MATRIX N." << i << " ----" << std::endl;
+		printMatrix(AB.first);
+
+		vecRes = scaling(AB, i);
+		std::cout << "---- SCALLING COEFFICIENT VECTOR N." << i << " ----" << std::endl;
+		printVector(vecRes);
+
+		transformation(AB, vecRes, i);
+		std::cout << "---- TRANFOMATED MATRIX N." << i << " ----" << std::endl;
+		printMatrix(AB.first);
+
+		vecRes = result(AB);
+		std::cout << "---- MODIFIED RESULT VECTOR N." << i << " ----" << std::endl;
+		printVector(vecRes);
+	}
+	printVectorResult(vecRes);
 }

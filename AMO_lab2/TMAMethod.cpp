@@ -28,27 +28,26 @@ std::vector<std::pair<double, double>> straightRun(const std::vector<std::vector
 	const std::vector<double>& r)
 {
 	std::vector<std::pair<double, double>> res;
-	double lamda = 0, delta = 0;
-	int n = arr[0].size();
+	double lamda = 0, delta = 0, tau =0;
+	int n = arr.size();
 	for (int i = 0; i < n; i++)
 	{
 		if (i == 0)
 		{
-			delta = (-1 * arr[i][i + 1]) / arr[i][i];
+			delta = (-arr[i][i + 1]) / arr[i][i];
 			lamda = r[i] / arr[i][i];
 		}
-		else if (i == n - 1)
+		else if (i != n - 1)
 		{
-			delta = 0;
-			lamda = (r[n - 1] - arr[i][i - 1] * res[i - 1].second)
-				/ (arr[i][i] + arr[i][i - 1] * res[i - 1].first);
+			tau = (arr[i][i] + arr[i][i - 1] * res[i - 1].first);
+			delta = -arr[i][i + 1] / tau;
+			lamda = (r[i] - arr[i][i - 1] * res[i - 1].second) / tau;
 		}
 		else
 		{
-			delta = (-1 * arr[i][i + 1]) /
-				(arr[i][i] + arr[i][i - 1] * res[i - 1].first);
-			lamda = (r[i] - arr[i][i - 1] * res[i - 1].second) /
-				(arr[i][i] + arr[i][i-1] * res[i - 1].first);
+		delta = 0;
+		lamda = (r[n - 1] - arr[i][i - 1] * res[i - 1].second)
+			/ (arr[i][i] + arr[i][i - 1] * res[i - 1].first);
 		}
 
 		res.push_back(std::make_pair(delta, lamda));
@@ -70,13 +69,6 @@ std::vector<double> reverseRun(const std::vector<std::pair<double, double>>& vec
 	return res;
 }
 
-void printTMAResult(const std::vector<double>& res)
-{
-	for (auto a : res)
-		std::cout << a << " "; 
-	std::cout << std::endl;
-}
-
 void printVectorOfPairs(const std::vector<std::pair<double, double>>& vec)
 {
 	int i = 0;
@@ -90,29 +82,26 @@ void printVectorOfPairs(const std::vector<std::pair<double, double>>& vec)
 void tmaMethod(std::vector<std::vector<double>> arr, 
 	std::vector<double> vec)
 {
-	double sum = 0;
-	for (int i = 0; i < 10000; i++) {
-		auto start = std::chrono::system_clock::now();
-		if (tmaCheck(arr))
-		{
-			auto for_reverse_run = straightRun(arr, vec);
-			auto end = std::chrono::system_clock::now();
-			auto result = reverseRun(for_reverse_run);
-			
-			sum += std::chrono::duration<float>(end - start).count();
-		}
+	std::cout << "----Input matrix A----" << std::endl;
+	printMatrix(arr);
+	std::cout << "----Input vector B----" << std::endl;
+	printVector(vec);
+
+	auto start = std::chrono::system_clock::now();
+	if (tmaCheck(arr))
+	{
+		auto for_reverse_run = straightRun(arr, vec);
+		auto result = reverseRun(for_reverse_run);
+		auto end = std::chrono::system_clock::now();
+
+		std::cout << "----Coefficients after straight run----" << std::endl;
+		printVectorOfPairs(for_reverse_run);
+		std::cout << std::endl;
+		printVectorResult(result);
+		std::cout << "Duration = " << std::chrono::duration<double>(end - start).count() * std::pow(10, 9)  << std::endl;
 	}
-	std::cout << "Duration = " << std::setprecision(10) <<sum/10000 << std::endl;
-	//auto start = std::chrono::system_clock::now();
-	//if (tmaCheck(arr))
-	//{
-	//	auto for_reverse_run = straightRun(arr, vec);
-	//	auto result = reverseRun(for_reverse_run);
-	//	auto end = std::chrono::system_clock::now();
-	//	printVectorOfPairs(for_reverse_run);
-	//	std::cout << std::endl;
-	//	printTMAResult(result);
-	//	std::cout << std::endl;
-	//	std::cout << "Duration = " << std::setprecision(10) << std::chrono::duration<double>(end - start).count() << std::endl;
-	//}
+	else
+	{
+		std::cout << "This matrix is not threediagonal";
+	}
 }

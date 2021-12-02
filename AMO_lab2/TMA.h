@@ -4,6 +4,7 @@
 #include <cmath>
 #include <chrono>
 #include <iomanip>
+#include "Matrix.h"
 
 bool tmaCheck(std::vector<std::vector<double>>& matrix);
 std::vector<std::pair<double, double>> straightRun(const std::vector<std::vector<double>>& arr,
@@ -11,7 +12,7 @@ std::vector<std::pair<double, double>> straightRun(const std::vector<std::vector
 std::vector<double> reverseRun(const std::vector<std::pair<double, double>>& vec);
 void tmaMethod(std::vector<std::vector<double>> arr,
 	std::vector<double> vec);
-void printTMAResult(const std::vector<double>& res);
+
 void printVectorOfPairs(const std::vector<std::pair<double, double>>& vec);
 
 // for det part

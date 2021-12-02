@@ -63,14 +63,11 @@ int main()
 			}
 			else
 				break;
+		case 4:
+			printDetViaTMA(thirdMatrix(), thirdVector());
 			break;
 		default:
 			break;
 		}
 	}
-	//hol_method();
-	//Gausse_method();
-	//LU();
-	//printDetViaTMA();
-	//tmaMethod();
 }
